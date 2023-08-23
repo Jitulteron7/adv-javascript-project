@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <!-- why there is diff in alightment of drawing when applied 
+  width="400"
+      height="400"
+    and  
+  style="widht:400px; height:400px; background-color: yellow"-->
+  <body>
+    <canvas
+      id="main"
+      width="400"
+      height="400"
+      style="background-color: yellow"
+    ></canvas>
+    <script>
+      const el = document.getElementById("main");
+      const ctx = el.getContext("2d");
+      console.log(ctx, "ctx");
+      // basicaly moving your pointer coordinate in the canvas
+
+      //base
+      ctx.beginPath();
+      ctx.moveTo(100, 150);
+      ctx.lineTo(100, 350);
+      ctx.lineTo(300, 350);
+      ctx.lineTo(300, 150);
+      ctx.lineTo(200, 100);
+      ctx.lineTo(100, 150);
+      ctx.lineTo(300, 150);
+      ctx.stroke();
+
+      //door
+      ctx.beginPath();
+      ctx.moveTo(150, 350);
+      ctx.lineTo(150, 250);
+      ctx.lineTo(250, 250);
+      ctx.lineTo(250, 350);
+      ctx.stroke();
+      ctx.moveTo(200, 350);
+      ctx.lineTo(200, 250);
+      ctx.stroke();
+
+      // circle window
+      ctx.beginPath();
+      ctx.arc(200, 200, 25, 0, 2 * Math.PI);
+      ctx.stroke();
+
+      // base
+      ctx.beginPath();
+      ctx.moveTo(100, 350);
+      ctx.lineTo(100, 370);
+      ctx.lineTo(300, 370);
+      ctx.lineTo(300, 350);
+      ctx.stroke();
+    </script>
+  </body>
+</html>

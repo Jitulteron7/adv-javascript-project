@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LINEAR INTERPOLATION</title>
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="container"></canvas>
+    <script>
+      const canvas = document.getElementById("container");
+      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+      const ctx = canvas.getContext("2d");
+      const A = {
+        x: 200,
+        y: 300,
+      };
+
+      const B = {
+        x: 600,
+        y: 100,
+      };
+
+      function animation() {
+        // ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const sec = new Date().getTime() / 1000;
+        const t = (Math.sin(sec * Math.PI) + 1) / 2;
+        const C = vector_interpolation(A, B, t);
+        drawCircle(C, "C");
+        drawCircle(A, "A");
+        drawCircle(B, "B");
+        requestAnimationFrame(animation);
+      }
+      animation();
+
+      function linear_interpolation(x, y, t) {
+        return x + (y - x) * t;
+      }
+      function vector_interpolation(A, B, t) {
+        return {
+          x: linear_interpolation(A.x, B.x, t),
+          y: linear_interpolation(A.y, B.y, t),
+        };
+      }
+
+      function drawCircle(Obj, Letter) {
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.strokeStyle = "black";
+        ctx.arc(Obj.x, Obj.y, 10, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fill();
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "bold 14px Arial";
+        ctx.fillText(Letter, Obj.x, Obj.y);
+      }
+    </script>
+  </body>
+</html>

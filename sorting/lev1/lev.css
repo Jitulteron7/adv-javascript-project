@@ -1,0 +1,17 @@
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#container {
+  width: 200px;
+  height: 400px;
+  display: flex;
+  align-items: flex-end;
+}
+#container div {
+  background-color: red;
+  width: 10px;
+  margin: 0 5px;
+}
