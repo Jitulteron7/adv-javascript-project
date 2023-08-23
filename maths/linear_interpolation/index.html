@@ -18,6 +18,18 @@
       canvas.height = window.innerHeight;
       canvas.width = window.innerWidth;
       const ctx = canvas.getContext("2d");
+
+      const blue = {
+        r: 0,
+        g: 70,
+        b: 160,
+      };
+      const orange = {
+        r: 230,
+        g: 150,
+        b: 0,
+      };
+
       const A = {
         x: 200,
         y: 300,
@@ -29,13 +41,15 @@
       };
 
       function animation() {
-        // ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         const sec = new Date().getTime() / 1000;
         const t = (Math.sin(sec * Math.PI) + 1) / 2;
         const C = vector_interpolation(A, B, t);
         drawCircle(C, "C");
         drawCircle(A, "A");
         drawCircle(B, "B");
+        const { r, g, b } = vector_interpolation(orange, blue, t);
+        canvas.style.backgroundColor = `rgb(${r},${g},${b})`;
         requestAnimationFrame(animation);
       }
       animation();
@@ -44,10 +58,13 @@
         return x + (y - x) * t;
       }
       function vector_interpolation(A, B, t) {
-        return {
-          x: linear_interpolation(A.x, B.x, t),
-          y: linear_interpolation(A.y, B.y, t),
-        };
+        const res = {};
+
+        for (let atr in A) {
+          res[atr] = linear_interpolation(A[atr], B[atr], t);
+        }
+
+        return res;
       }
 
       function drawCircle(Obj, Letter) {
