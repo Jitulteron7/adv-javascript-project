@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SEGMENT INTERACTION</title>
+  </head>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+  <body>
+    <canvas id="container"></canvas>
+    <script>
+      const canvas = document.getElementById("container");
+      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+      const ctx = canvas.getContext("2d");
+
+      const A = { x: 200, y: 100 };
+      const B = { x: 500, y: 300 };
+      const C = { x: 200, y: 250 };
+      const D = { x: 400, y: 50 };
+
+      function drawCicle(letter, obj, colorChage) {
+        const { x, y } = obj;
+        ctx.beginPath();
+        ctx.arc(x, y, 10, 0, Math.PI * 2);
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = colorChage ? "red" : "white";
+        ctx.stroke();
+        ctx.fill();
+
+        ctx.fillStyle = "black";
+        ctx.font = "bold 14px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(letter, x, y);
+      }
+      const mouse = {
+        x: 0,
+        y: 0,
+      };
+
+      document.onmousemove = (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+      };
+      //animation
+      //   let t = -1;
+      animation();
+      function animation() {
+        const radius = 100;
+        A.x = mouse.x;
+        A.y = mouse.y - radius;
+        B.x = mouse.x;
+        B.y = mouse.y + radius;
+
+        //mid points
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        /// lines
+        ctx.beginPath();
+        ctx.moveTo(A.x, A.y);
+        ctx.lineTo(B.x, B.y);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(C.x, C.y);
+        ctx.lineTo(D.x, D.y);
+        ctx.stroke();
+        //circle
+        drawCicle("A", A);
+        drawCicle("B", B);
+        drawCicle("C", C);
+        drawCicle("D", D);
+
+        // const M = vector(A, B, t);
+        // const N = vector(C, D, t);
+        const I = getIntersection(A, B, C, D);
+
+        // drawCicle("T", T);
+        // drawCicle("M", M, t < 0 || t > 1);
+        // drawCicle("N", N, t < 0 || t > 1);
+        drawCicle("I", I);
+        // t = t > 1 ? -1 : t + 0.009;
+        requestAnimationFrame(animation);
+      }
+
+      function getIntersection(A, B, C, D) {
+        const top = (D.x - C.x) * (A.y - C.y) - (D.y - C.y) * (A.x - C.x);
+        const bottom = (D.y - C.y) * (B.x - A.x) - (B.y - A.y) * (D.x - C.x);
+        const t = top / bottom;
+        return vector(A, B, t);
+      }
+      // vector
+      function vector(A, B, t) {
+        return {
+          x: linear_interpolation(A.x, B.x, t),
+          y: linear_interpolation(A.y, B.y, t),
+        };
+      }
+
+      // interpolation
+      function linear_interpolation(a, b, t) {
+        return a + (b - a) * t;
+      }
+    </script>
+  </body>
+</html>
