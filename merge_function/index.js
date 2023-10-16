@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 function merge(o1, o2) {
   let final = {};
   for (let key in o1) {
@@ -8,8 +10,17 @@ function merge(o1, o2) {
         if (o1[key] === o2[key]) {
           final[key] = o1[key];
         } else {
-          let arr = [o1[key], ...o2[key]];
-          final[key] = Object.assign({}, arr);
+          let arr;
+          if (typeof o1[key] === "object" || typeof o2[key] === "object") {
+            arr =
+              typeof o1[key] === "object"
+                ? [{ ...o1[key] }, o2[key]]
+                : (arr = [o1[key], { ...o2[key] }]);
+          } else {
+            arr = [o1[key], o2[key]];
+          }
+
+          final[key] = arr;
         }
       }
     } else {
@@ -18,16 +29,11 @@ function merge(o1, o2) {
   }
 
   for (let key in o2) {
-    if (o1[key]) {
-      if (typeof o1[key] == "object" && typeof o2[key] == "object") {
-        final[key] = merge(o1[key], o2[key]);
-      }
-    } else {
-      final[key] = o2[key];
-    }
+    if (!o1[key]) final[key] = o2[key];
   }
   return final;
 }
+
 let c = {
   1: "a",
   2: "b",
@@ -40,12 +46,30 @@ let c = {
       },
     },
   },
-};
-let d = {
-  1: "x",
-  3: "c",
-  4: "y",
+  5: {
+    a: "1",
+    b: "2",
+  },
 };
 
-let data = merge(c, d);
+let d = {
+  1: "x",
+  3: {
+    b: {
+      y: {
+        2: "b",
+      },
+    },
+  },
+  4: "y",
+  5: "c",
+};
+
+let data = JSON.stringify(merge(c, d));
+
+fs.writeFile("student-3.json", data, (err) => {
+  if (err) throw err;
+  console.log("Data written to file");
+});
+
 console.log(data);
